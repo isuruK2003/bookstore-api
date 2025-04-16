@@ -7,10 +7,10 @@ import java.util.Set;
 
 @ApplicationPath("rest")
 public class MyApplication extends Application {
-@Override
-public Set<Class<?>> getClasses() {
-Set<Class<?>> classes = new HashSet<>();
-classes.add(HelloWorldResource.class);
-return classes;
-}
+    @Override
+    public Set<Class<?>> getClasses() {
+        Set<Class<?>> classes = new HashSet<>();
+        classes.add(HelloWorldResource.class);
+        return classes;
+    }
 }

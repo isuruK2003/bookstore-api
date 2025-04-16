@@ -1,1 +1,4 @@
 /Practice/mavenproject4/target/
+.idea/
+.vscode/
+target/
