@@ -44,8 +44,9 @@ public class BookResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBook(Book book) {
-        bookDAO.update(book);
+    @Path("/{id}")
+    public Response updateBook(@PathParam("id") int id, Book book) {
+        bookDAO.update(id, book);
         Response response = Response.status(Response.Status.NO_CONTENT).build();
         logger.info("{} PUT books/ : {}", response.getStatus(), response);
         return response;

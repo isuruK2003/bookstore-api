@@ -38,13 +38,11 @@ public class BookDAO implements DAO<Book> {
         }
     }
 
-    public void update(Book book) {
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getId() == book.getId()) {
-                books.put(i, book);
-                return;
-            }
+    public void update(int id, Book book) {
+        if (books.containsKey(id)) {
+            books.put(id, book);
+        } else {
+            throw new BookNotFoundException("Book with the id " + id + " not found");
         }
-        throw new BookNotFoundException("Book with the id " + book.getId() + " not found");
     }
 }
