@@ -1,7 +1,6 @@
 package dev.isuru.resource;
 
 import dev.isuru.dao.CustomerDAO;
-import dev.isuru.model.Book;
 import dev.isuru.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
