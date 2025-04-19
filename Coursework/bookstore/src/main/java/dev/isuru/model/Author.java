@@ -15,6 +15,12 @@ public class Author {
         this.biography = biography;
     }
 
+    public Author(String firstName, String lastName, String biography) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.biography = biography;
+    }
+
     public int getId() {
         return id;
     }
