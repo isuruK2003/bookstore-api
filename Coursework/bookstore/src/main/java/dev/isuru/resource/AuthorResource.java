@@ -18,7 +18,7 @@ public class AuthorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAuthors() {
         Response response = Response.ok(authorDAO.getAll()).build();
-        logger.info("{} GET authors/ : {}", response.getStatus(), response);
+        logger.info("{} GET authors/", response.getStatus());
         return response;
     }
 
@@ -27,7 +27,7 @@ public class AuthorResource {
     @Path("/{id}")
     public Response getAuthorById(@PathParam("id") int id) {
         Response response = Response.ok(authorDAO.get(id)).build();
-        logger.info("{} GET authors/{} : {}", response.getStatus(), id, response);
+        logger.info("{} GET authors/{}", response.getStatus(), id);
         return response;
     }
 
@@ -37,7 +37,7 @@ public class AuthorResource {
     public Response createAuthor(Author author) {
         authorDAO.add(author);
         Response response = Response.status(Response.Status.CREATED).build();
-        logger.info("{} POST authors/ : {}", response.getStatus(), response);
+        logger.info("{} POST authors/", response.getStatus());
         return response;
     }
 
@@ -48,7 +48,7 @@ public class AuthorResource {
     public Response updateAuthor(@PathParam("id") int id, Author author) {
         authorDAO.update(id, author);
         Response response = Response.status(Response.Status.NO_CONTENT).build();
-        logger.info("{} PUT authors/ : {}", response.getStatus(), response);
+        logger.info("{} PUT authors/{}", response.getStatus(), id);
         return response;
     }
 
@@ -58,7 +58,7 @@ public class AuthorResource {
     public Response deleteAuthor(@PathParam("id") int id) {
         authorDAO.delete(id);
         Response response = Response.status(Response.Status.NO_CONTENT).build();
-        logger.info("{} DELETE authors/ : {}", response.getStatus(), response);
+        logger.info("{} DELETE authors/{}", response.getStatus(), id);
         return response;
     }
 }

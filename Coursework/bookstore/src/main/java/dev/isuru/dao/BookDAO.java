@@ -34,18 +34,18 @@ public class BookDAO implements DAO<Book> {
     }
 
     @Override
-    public void delete(int id) {
+    public void update(int id, Book book) {
         if (books.containsKey(id)) {
-            books.remove(id);
+            books.put(id, book);
         } else {
             throw new BookNotFoundException("Book with the id " + id + " not found");
         }
     }
 
     @Override
-    public void update(int id, Book book) {
+    public void delete(int id) {
         if (books.containsKey(id)) {
-            books.put(id, book);
+            books.remove(id);
         } else {
             throw new BookNotFoundException("Book with the id " + id + " not found");
         }
