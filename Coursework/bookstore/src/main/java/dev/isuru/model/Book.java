@@ -1,14 +1,35 @@
 package dev.isuru.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class Book {
 
-    private int id;
+    @NotNull(message = "Book ID cannot be null")
+    private Integer id;
+
+    @NotNull(message = "Title cannot be null")
     private String title;
-    private int authorId;
+
+    @NotNull(message = "Author ID cannot be null")
+    private Integer authorId;
+
+    @NotNull(message = "ISBN cannot be null")
     private String isbn;
-    private int publicationYear;
-    private double price;
-    private int stock;
+
+    @NotNull
+    @Min(1600)
+    @Max(65535)
+    private Integer publicationYear;
+
+    @NotNull
+    @Min(0)
+    private Double price;
+
+    @NotNull
+    @Min(value = 0, message = "Stock cannot be negative")
+    private Integer stock;
 
     public Book() {}
 

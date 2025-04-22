@@ -1,9 +1,21 @@
 package dev.isuru.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class Author {
-    private int id;
+    @NotNull(message = "Author ID cannot be null")
+    private Integer id;
+
+    @NotNull(message = "First name cannot be null")
+    @Pattern(regexp = "^[A-Za-z]{2,}$", message = "First name must contain only letters and be at least 2 characters long")
     private String firstName;
+
+    @NotNull(message = "Last name cannot be null")
+    @Pattern(regexp = "^[A-Za-z]{2,}$", message = "Last name must contain only letters and be at least 2 characters long")
     private String lastName;
+
+    @NotNull(message = "Biography cannot be null")
     private String biography;
 
     public Author() {}

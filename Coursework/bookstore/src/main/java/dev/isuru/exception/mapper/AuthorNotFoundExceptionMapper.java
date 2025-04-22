@@ -1,17 +1,26 @@
 package dev.isuru.exception.mapper;
 
 import dev.isuru.exception.AuthorNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+import java.util.HashMap;
+import java.util.Map;
 
+@Provider
 public class AuthorNotFoundExceptionMapper implements ExceptionMapper<AuthorNotFoundException> {
-    private static final Logger logger = LoggerFactory.getLogger(AuthorNotFoundExceptionMapper.class);
 
+    @Override
     public Response toResponse(AuthorNotFoundException exception) {
-        logger.error("Author not found: {}", exception.getMessage(), exception);
-        return Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
+        Map<String, Object> error = new HashMap<>();
+        error.put("type", AuthorNotFoundException.class.getSimpleName());
+        error.put("message", exception.getMessage());
+
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(error)
+                .type(MediaType.APPLICATION_JSON)
+                .build();
     }
 }
