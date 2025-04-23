@@ -18,26 +18,9 @@ import java.util.List;
 @Path("/authors")
 public class AuthorResource {
 
-    private static final AuthorDAO authorDAO = new AuthorDAO();
-    private static final BookDAO bookDAO = new BookDAO();
+    private static final AuthorDAO authorDAO = AuthorDAO.getAuthorDAO();
+    private static final BookDAO bookDAO = BookDAO.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(AuthorResource.class);
-
-
-    /*Remove in production*/
-    static {
-        AuthorDAO authorDAO = new AuthorDAO();
-        authorDAO.add(new Author(
-                "Stephen",
-                "Hawking",
-                "Stephen William Hawking was an English theoretical physicist, cosmologist, and author who was director of research at the Centre for Theoretical Cosmology at the University of Cambridge."
-        ));
-        authorDAO.add(new Author(
-                "James",
-                "Clear",
-                "James Clear (born 1986) is an American writer. He is best known for his book Atomic Habits."
-        ));
-    }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

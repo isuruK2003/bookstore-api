@@ -18,31 +18,9 @@ import java.util.List;
 
 @Path("/books")
 public class BookResource {
-    private final BookDAO bookDAO = new BookDAO();
-    private final AuthorDAO authorDAO = new AuthorDAO();
+    private final BookDAO bookDAO = BookDAO.getInstance();
+    private final AuthorDAO authorDAO = AuthorDAO.getAuthorDAO();
     private static final Logger logger = LoggerFactory.getLogger(BookResource.class);
-
-    /*Remove in production*/
-    static {
-        BookDAO bookDAO = new BookDAO();
-        bookDAO.add(new Book(
-                "Atimic Habits",
-                1,
-                "978-3-16-148410-0",
-                2016,
-                10.99,
-                5
-        ));
-        bookDAO.add(new Book(
-                "A Brief History of Time",
-                0,
-                "978-3-16-148410-3",
-                2016,
-                12.99,
-                30
-        ));
-    }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

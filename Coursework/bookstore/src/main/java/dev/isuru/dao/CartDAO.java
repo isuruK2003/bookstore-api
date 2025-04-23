@@ -4,24 +4,39 @@ import dev.isuru.model.Cart;
 import dev.isuru.model.Cart.CartItem;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CartDAO {
     // Key: customerId → Value: Cart
-    private static final Map<Integer, Cart> carts = new HashMap<>();
+    private final Map<Integer, Cart> carts = new ConcurrentHashMap<>();
+    private static volatile CartDAO instance;
 
-    public void addCartItem(int customerId, int bookId, int quantity) {
-        Cart cart = carts.computeIfAbsent(customerId, id -> new Cart(customerId, new ArrayList<>()));
+    private CartDAO() {}
 
-        // Check if item already exists, then update quantity
-        for (CartItem item : cart.getCartItems()) {
-            if (item.getBookId().equals(bookId)) {
-                item.setQuantity(item.getQuantity() + quantity);
-                return;
+    public static CartDAO getInstance() {
+        if (instance == null) {
+            synchronized (CartDAO.class) {
+                if (instance == null) {
+                    instance = new CartDAO();
+                }
             }
         }
+        return instance;
+    }
 
-        // If not found, add as new item
-        cart.getCartItems().add(new CartItem(bookId, quantity));
+    public void addCartItem(int customerId, int bookId, int quantity) {
+        Cart cart = carts.computeIfAbsent(customerId,
+                id -> new Cart(customerId, Collections.synchronizedList(new ArrayList<>())));
+
+        synchronized (cart) {
+            for (CartItem item : cart.getCartItems()) {
+                if (item.getBookId().equals(bookId)) {
+                    item.setQuantity(item.getQuantity() + quantity);
+                    return;
+                }
+            }
+            cart.getCartItems().add(new CartItem(bookId, quantity));
+        }
     }
 
     public Cart getCartByCustomerId(int customerId) {
@@ -35,17 +50,22 @@ public class CartDAO {
     public boolean hasBookInCart(int customerId, int bookId) {
         Cart cart = carts.get(customerId);
         if (cart == null) return false;
-        return cart.getCartItems().stream().anyMatch(item -> item.getBookId().equals(bookId));
+
+        synchronized (cart) {
+            return cart.getCartItems().stream()
+                    .anyMatch(item -> item.getBookId().equals(bookId));
+        }
     }
 
     public void removeCartItem(int customerId, int bookId) {
         Cart cart = carts.get(customerId);
         if (cart == null) return;
 
-        cart.getCartItems().removeIf(item -> item.getBookId().equals(bookId));
-
-        if (cart.getCartItems().isEmpty()) {
-            carts.remove(customerId);
+        synchronized (cart) {
+            cart.getCartItems().removeIf(item -> item.getBookId().equals(bookId));
+            if (cart.getCartItems().isEmpty()) {
+                carts.remove(customerId);
+            }
         }
     }
 
@@ -54,6 +74,11 @@ public class CartDAO {
     }
 
     public List<CartItem> getAllItems(int customerId) {
-        return carts.containsKey(customerId) ? carts.get(customerId).getCartItems() : Collections.emptyList();
+        Cart cart = carts.get(customerId);
+        if (cart == null) return Collections.emptyList();
+
+        synchronized (cart) {
+            return new ArrayList<>(cart.getCartItems());
+        }
     }
 }

@@ -16,9 +16,9 @@ import javax.ws.rs.core.Response;
 @Consumes("application/json")
 public class CartResource {
 
-    private final CartDAO cartDAO = new CartDAO();
-    private final BookDAO bookDAO = new BookDAO();
-    private final CustomerDAO customerDAO = new CustomerDAO();
+    private final CartDAO cartDAO = CartDAO.getInstance();
+    private final BookDAO bookDAO = BookDAO.getInstance();
+    private final CustomerDAO customerDAO = CustomerDAO.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(CartResource.class);
 
     @POST

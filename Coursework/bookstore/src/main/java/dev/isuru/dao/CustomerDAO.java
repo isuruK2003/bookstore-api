@@ -3,13 +3,33 @@ package dev.isuru.dao;
 import dev.isuru.model.Customer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class CustomerDAO{
-    private static final Map<Integer, Customer> customers = new HashMap<>();
-    private static int lastId = 0;
+public class CustomerDAO {
+    private final ConcurrentMap<Integer, Customer> customers;
+    private final AtomicInteger lastId;
+    private static volatile CustomerDAO instance;
+
+    // Private constructor to enforce singleton
+    private CustomerDAO() {
+        this.customers = new ConcurrentHashMap<>();
+        this.lastId = new AtomicInteger(0);
+    }
+
+    // Singleton instance retrieval with double-checked locking
+    public static CustomerDAO getInstance() {
+        if (instance == null) {
+            synchronized (CustomerDAO.class) {
+                if (instance == null) {
+                    instance = new CustomerDAO();
+                }
+            }
+        }
+        return instance;
+    }
 
     public Customer get(int id) {
         return customers.get(id);
@@ -20,9 +40,9 @@ public class CustomerDAO{
     }
 
     public void add(Customer customer) {
-        customer.setId(lastId);
-        customers.put(lastId, customer);
-        lastId++;
+        int newId = lastId.getAndIncrement();
+        customer.setId(newId);
+        customers.put(newId, customer);
     }
 
     public void update(int id, Customer customer) {
@@ -34,7 +54,7 @@ public class CustomerDAO{
     }
 
     public boolean contains(Customer customer) {
-        return  customers.containsKey(customer.getId());
+        return customers.containsKey(customer.getId());
     }
 
     public boolean contains(int id) {

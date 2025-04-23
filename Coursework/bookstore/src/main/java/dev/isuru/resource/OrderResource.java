@@ -15,9 +15,9 @@ import java.util.List;
 @Consumes("application/json")
 public class OrderResource {
 
-    private final OrderDAO orderDAO = new OrderDAO();
-    private final CustomerDAO customerDAO = new CustomerDAO();
-    private final CartDAO cartDAO = new CartDAO();
+    private final OrderDAO orderDAO = OrderDAO.getInstance();
+    private final CustomerDAO customerDAO = CustomerDAO.getInstance();
+    private final CartDAO cartDAO = CartDAO.getInstance();
 
     @GET
     @Path("/{orderId}")

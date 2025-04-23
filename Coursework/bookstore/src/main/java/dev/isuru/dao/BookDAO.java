@@ -3,13 +3,53 @@ package dev.isuru.dao;
 import dev.isuru.model.Book;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookDAO {
-    private static final Map<Integer, Book> books = new HashMap<>();
-    private static int lastId = 0;
+    private final ConcurrentMap<Integer, Book> books;
+    private final AtomicInteger lastId;
+    private static volatile BookDAO instance;
+
+    private BookDAO() {
+        this.books = new ConcurrentHashMap<>();
+        this.lastId = new AtomicInteger(0);
+    }
+
+    // Singleton instance retrieval with double-checked locking
+    public static BookDAO getInstance() {
+        if (instance == null) {
+            synchronized (BookDAO.class) {
+                if (instance == null) {
+                    instance = new BookDAO();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /*Remove in production*/
+    static {
+        BookDAO bookDAO = BookDAO.getInstance();
+        bookDAO.add(new Book(
+                "Atimic Habits",
+                1,
+                "978-3-16-148410-0",
+                2016,
+                10.99,
+                5
+        ));
+        bookDAO.add(new Book(
+                "A Brief History of Time",
+                0,
+                "978-3-16-148410-3",
+                2016,
+                12.99,
+                30
+        ));
+    }
 
     public Book get(int id) {
         return books.get(id);
@@ -17,7 +57,7 @@ public class BookDAO {
 
     public List<Book> getBooksByAuthor(Integer authorId) {
         List<Book> result = new ArrayList<>();
-        for (Book book: books.values()) {
+        for (Book book : books.values()) {
             if (book.getAuthorId() == authorId) {
                 result.add(book);
             }
@@ -30,9 +70,9 @@ public class BookDAO {
     }
 
     public void add(Book book) {
-        book.setId(lastId);
-        books.put(lastId, book);
-        lastId++;
+        int newId = lastId.getAndIncrement();
+        book.setId(newId);
+        books.put(newId, book);
     }
 
     public void update(int id, Book book) {
@@ -44,7 +84,7 @@ public class BookDAO {
     }
 
     public boolean contains(Book book) {
-        return  books.containsKey(book.getId());
+        return books.containsKey(book.getId());
     }
 
     public boolean contains(int id) {
@@ -53,11 +93,19 @@ public class BookDAO {
 
     public void reduceStock(int bookId, int quantity) {
         Book book = books.get(bookId);
-        book.setStock(book.getStock() - quantity);
+        if (book != null) {
+            synchronized (book) {  // Ensure atomic stock update
+                book.setStock(book.getStock() - quantity);
+            }
+        }
     }
 
     public void increaseStock(int bookId, int quantity) {
         Book book = books.get(bookId);
-        book.setStock(book.getStock() + quantity);
+        if (book != null) {
+            synchronized (book) {  // Ensure atomic stock update
+                book.setStock(book.getStock() + quantity);
+            }
+        }
     }
 }

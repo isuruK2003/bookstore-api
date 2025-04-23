@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 @Path("/customers")
 public class CustomerResource {
-    private final CustomerDAO customerDAO = new CustomerDAO();
+    private final CustomerDAO customerDAO = CustomerDAO.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(CustomerResource.class.getName());
 
     @GET
