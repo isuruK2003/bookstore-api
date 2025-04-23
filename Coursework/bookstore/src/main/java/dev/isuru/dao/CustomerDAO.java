@@ -31,6 +31,22 @@ public class CustomerDAO {
         return instance;
     }
 
+    static {
+        CustomerDAO customerDAO = CustomerDAO.getInstance();
+        customerDAO.add(new Customer(
+                "Lex",
+                "Freedmen",
+                "lexy@gmail.com",
+                "g32jhiybwi4"
+        ));
+        customerDAO.add(new Customer(
+                "Terry",
+                "Davis",
+                "terry@terrydavis.com",
+                "32hiyfdf324"
+        ));
+    }
+
     public Customer get(int id) {
         return customers.get(id);
     }
