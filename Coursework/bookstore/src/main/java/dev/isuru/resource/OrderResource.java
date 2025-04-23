@@ -6,6 +6,9 @@ import dev.isuru.dao.OrderDAO;
 import dev.isuru.exception.CartNotFoundException;
 import dev.isuru.exception.CustomerNotFoundException;
 import dev.isuru.model.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -18,6 +21,7 @@ public class OrderResource {
     private final OrderDAO orderDAO = OrderDAO.getInstance();
     private final CustomerDAO customerDAO = CustomerDAO.getInstance();
     private final CartDAO cartDAO = CartDAO.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(OrderResource.class);
 
     @GET
     @Path("/{orderId}")
@@ -27,14 +31,18 @@ public class OrderResource {
     ) {
         validateCustomerExists(customerId);
         Order order = orderDAO.getOrder(orderId);
-        return Response.ok(order).build();
+        Response response = Response.ok(order).build();
+        logger.info("{} GET /customers/{}/orders/{}", response.getStatus(), customerId, orderId);
+        return response;
     }
 
     @GET
     public Response getCustomerOrders(@PathParam("customerId") int customerId) {
         validateCustomerExists(customerId);
         List<Order> orders = orderDAO.getCustomerOrders(customerId);
-        return Response.ok(orders).build();
+        Response response = Response.ok(orders).build();
+        logger.info("{} GET /customers/{}/orders", response.getStatus(), customerId);
+        return response;
     }
 
     @POST
@@ -44,7 +52,9 @@ public class OrderResource {
             throw new CartNotFoundException(customerId);
         }
         Order newOrder = orderDAO.createOrder(customerId);
-        return Response.status(Response.Status.CREATED).entity(newOrder).build();
+        Response response = Response.status(Response.Status.CREATED).entity(newOrder).build();
+        logger.info("{} POST //customers/{}/orders", response.getStatus(), customerId);
+        return response;
     }
 
     // Helper Methods:
