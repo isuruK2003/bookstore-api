@@ -15,6 +15,16 @@ public class BookDAO {
         return books.get(id);
     }
 
+    public List<Book> getBooksByAuthor(Integer authorId) {
+        List<Book> result = new ArrayList<>();
+        for (Book book: books.values()) {
+            if (book.getAuthorId() == authorId) {
+                result.add(book);
+            }
+        }
+        return result;
+    }
+
     public List<Book> getAll() {
         return new ArrayList<>(books.values());
     }

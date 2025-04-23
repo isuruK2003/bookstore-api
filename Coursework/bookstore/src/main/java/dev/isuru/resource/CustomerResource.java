@@ -6,8 +6,6 @@ import dev.isuru.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -40,7 +38,7 @@ public class CustomerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCustomers(@NotNull @Valid Customer customer) {
+    public Response createCustomers(Customer customer) {
         customerDAO.add(customer);
         Response response = Response.status(Response.Status.CREATED).entity(customer).build();
         logger.info("{} POST customers/", response.getStatus());
@@ -51,7 +49,7 @@ public class CustomerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response updateCustomer(@PathParam("id") int id, @NotNull @Valid Customer customer) {
+    public Response updateCustomer(@PathParam("id") int id, Customer customer) {
         if (customerDAO.contains(id)) {
             throw new CustomerNotFoundException(id);
         }

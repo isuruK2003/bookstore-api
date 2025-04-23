@@ -1,14 +1,10 @@
 package dev.isuru.model;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
 public class Order {
-    @NotNull(message = "Order ID cannot be null")
     private Integer id;
-
-    @NotNull(message = "Customer ID cannot be null")
     private Integer customerId;
 
     private List<CartItem> items;

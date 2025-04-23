@@ -1,27 +1,12 @@
 package dev.isuru.model;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 public class Customer {
-    @NotNull(message = "ID cannot be null")
     private Integer id;
-
-    @NotNull(message = "First name cannot be null")
-    @Pattern(regexp = "^[A-Za-z]{2,}$", message = "First name must contain only letters and be at least 2 characters long")
     private String firstName;
-
-    @NotNull(message = "Last name cannot be null")
-    @Pattern(regexp = "^[A-Za-z]{2,}$", message = "Last name must contain only letters and be at least 2 characters long")
     private String lastName;
-
-    @NotNull(message = "Email cannot be null")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Email must be a valid format like user@example.com")
     private String email;
-
-    @NotNull(message = "Password cannot be null")
-    @Pattern(regexp = "^.{8,20}$", message = "Password must be between 8 and 20 characters")
     private String password;
 
     public Customer() {}

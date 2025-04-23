@@ -6,8 +6,6 @@ import dev.isuru.dao.CustomerDAO;
 import dev.isuru.exception.*;
 import dev.isuru.model.CartItem;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -22,7 +20,7 @@ public class CartResource {
 
     @POST
     @Path("/items")
-    public Response addToCart(@PathParam("customerId") int customerId, @NotNull @Valid CartItem item) {
+    public Response addToCart(@PathParam("customerId") int customerId, CartItem item) {
         validateCustomerExists(customerId);
 
         int bookId = item.getBookId();
@@ -44,7 +42,7 @@ public class CartResource {
     public Response updateCartItem(
             @PathParam("customerId") int customerId,
             @PathParam("bookId") int bookId,
-            @NotNull @Valid CartItem item
+            CartItem item
     ) {
         validateCustomerExists(customerId);
         validateCartExists(customerId);
