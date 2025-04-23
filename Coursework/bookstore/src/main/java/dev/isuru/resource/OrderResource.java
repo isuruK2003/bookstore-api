@@ -1,8 +1,9 @@
 package dev.isuru.resource;
 
-import dev.isuru.dao.BookDAO;
+import dev.isuru.dao.CartDAO;
 import dev.isuru.dao.CustomerDAO;
 import dev.isuru.dao.OrderDAO;
+import dev.isuru.exception.CartNotFoundException;
 import dev.isuru.exception.CustomerNotFoundException;
 import dev.isuru.model.Order;
 import javax.ws.rs.*;
@@ -16,14 +17,7 @@ public class OrderResource {
 
     private final OrderDAO orderDAO = new OrderDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
-    private final BookDAO bookDAO = new BookDAO();
-
-    @POST
-    public Response createOrder(@PathParam("customerId") int customerId) {
-        validateCustomerExists(customerId);
-        Order newOrder = orderDAO.createOrder(customerId);
-        return Response.status(Response.Status.CREATED).entity(newOrder).build();
-    }
+    private final CartDAO cartDAO = new CartDAO();
 
     @GET
     @Path("/{orderId}")
@@ -42,6 +36,18 @@ public class OrderResource {
         List<Order> orders = orderDAO.getCustomerOrders(customerId);
         return Response.ok(orders).build();
     }
+
+    @POST
+    public Response createOrder(@PathParam("customerId") int customerId) {
+        validateCustomerExists(customerId);
+        if (!cartDAO.hasCart(customerId)) {
+            throw new CartNotFoundException(customerId);
+        }
+        Order newOrder = orderDAO.createOrder(customerId);
+        return Response.status(Response.Status.CREATED).entity(newOrder).build();
+    }
+
+    // Helper Methods:
 
     private void validateCustomerExists(int customerId) {
         if (!customerDAO.contains(customerId)) {

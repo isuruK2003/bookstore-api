@@ -1,17 +1,16 @@
 package dev.isuru.dao;
 
 import dev.isuru.model.Order;
-import dev.isuru.model.CartItem;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import dev.isuru.model.Cart;
+import dev.isuru.model.Cart.CartItem;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderDAO {
-    private static final AtomicInteger idGenerator = new AtomicInteger(1);
     private static final Map<Integer, Order> orders = new HashMap<>();
     private static final Map<Integer, List<Integer>> customerOrders = new HashMap<>();
+    private static Integer lastId = 0;
 
     private final BookDAO bookDAO;
     private final CartDAO cartDAO;
@@ -22,21 +21,29 @@ public class OrderDAO {
     }
 
     public Order createOrder(int customerId) {
-        // Get cart items and validate
-        Map<Integer, CartItem> cartItems = cartDAO.getCartByCustomerId(customerId);
+        Cart cart = cartDAO.getCartByCustomerId(customerId);
+        List<CartItem> cartItems = cart.getCartItems();
 
-        // Create new order
-        Order order = new Order();
-        order.setId(idGenerator.getAndIncrement());
-        order.setCustomerId(customerId);
-        order.setItems(new ArrayList<>(cartItems.values()));
+        if (cartItems.isEmpty()) {
+            throw new IllegalStateException("Cart is empty. Cannot create order.");
+        }
 
-        // Process stock changes
-        cartItems.values().forEach(item -> {
+        // Convert to OrderItems
+        List<Order.OrderItem> orderItems = cartItems.stream()
+                .map(item -> new Order.OrderItem(item.getBookId(), item.getQuantity()))
+                .collect(Collectors.toList());
+
+        // Reduce stock
+        for (CartItem item : cartItems) {
             bookDAO.reduceStock(item.getBookId(), item.getQuantity());
-        });
+        }
 
-        // Save order
+        // Create and save order
+        Order order = new Order();
+        order.setId(lastId++);
+        order.setCustomerId(customerId);
+        order.setItems(orderItems);
+
         orders.put(order.getId(), order);
         customerOrders.computeIfAbsent(customerId, k -> new ArrayList<>()).add(order.getId());
 
@@ -51,9 +58,7 @@ public class OrderDAO {
     }
 
     public List<Order> getCustomerOrders(int customerId) {
-        List<Integer> orderIds = customerOrders.getOrDefault(customerId, new ArrayList<>());
-        List<Order> result = new ArrayList<>();
-        orderIds.forEach(id -> result.add(orders.get(id)));
-        return result;
+        List<Integer> orderIds = customerOrders.getOrDefault(customerId, Collections.emptyList());
+        return orderIds.stream().map(orders::get).collect(Collectors.toList());
     }
 }

@@ -4,7 +4,9 @@ import dev.isuru.dao.BookDAO;
 import dev.isuru.dao.CartDAO;
 import dev.isuru.dao.CustomerDAO;
 import dev.isuru.exception.*;
-import dev.isuru.model.CartItem;
+import dev.isuru.model.Cart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -17,24 +19,29 @@ public class CartResource {
     private final CartDAO cartDAO = new CartDAO();
     private final BookDAO bookDAO = new BookDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
+    private static final Logger logger = LoggerFactory.getLogger(CartResource.class);
 
     @POST
     @Path("/items")
-    public Response addToCart(@PathParam("customerId") int customerId, CartItem item) {
+    public Response addToCart(@PathParam("customerId") int customerId, Cart.CartItem item) {
         validateCustomerExists(customerId);
 
         int bookId = item.getBookId();
         int quantity = item.getQuantity();
 
         validateBook(bookId, quantity);
-        cartDAO.addCartItem(customerId, bookId, new CartItem(bookId, quantity));
-        return Response.accepted().build();
+        cartDAO.addCartItem(customerId, bookId, quantity);
+        Response response = Response.status(Response.Status.CREATED).entity(item).build();
+        logger.info("{} POST /customers/{}/cart/items", response.getStatus(), customerId);
+        return response;
     }
 
     @GET
     public Response getCart(@PathParam("customerId") int customerId) {
         validateCustomerExists(customerId);
-        return Response.ok(cartDAO.getCartByCustomerId(customerId)).build();
+        Response response = Response.ok(cartDAO.getCartByCustomerId(customerId)).build();
+        logger.info("{} GET /customers/{}/cart/", response.getStatus(), customerId);
+        return response;
     }
 
     @PUT
@@ -42,7 +49,7 @@ public class CartResource {
     public Response updateCartItem(
             @PathParam("customerId") int customerId,
             @PathParam("bookId") int bookId,
-            CartItem item
+            Cart.CartItem item
     ) {
         validateCustomerExists(customerId);
         validateCartExists(customerId);
@@ -53,8 +60,10 @@ public class CartResource {
         validateQuantity(quantity);
         validateStock(bookId, quantity);
 
-        cartDAO.addCartItem(customerId, bookId, item);
-        return Response.accepted().build();
+        cartDAO.addCartItem(customerId, bookId, quantity);
+        Response response = Response.noContent().build();
+        logger.info("{} PUT /customers/{}/cart/items/{}", response.getStatus(), customerId, bookId);
+        return response;
     }
 
     @DELETE
@@ -68,13 +77,12 @@ public class CartResource {
         validateBookInCart(customerId, bookId);
 
         cartDAO.removeCartItem(customerId, bookId);
-        return Response.noContent().build();
+        Response response = Response.noContent().build();
+        logger.info("{} DELETE /customers/{}/cart/items/{}", response.getStatus(), customerId, bookId);
+        return response;
     }
 
-    /*
-    * Validators
-    * ----------
-    */
+    // Helper Methods:
 
     private void validateCustomerExists(int customerId) {
         if (!customerDAO.contains(customerId)) {

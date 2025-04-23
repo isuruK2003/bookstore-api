@@ -6,6 +6,6 @@ public class CustomerNotFoundException extends RuntimeException{
     }
 
     public CustomerNotFoundException(int customerId) {
-        super("Cart of the Customer with id=" + customerId + " not found");
+        super("Customer with id=" + customerId + " not found");
     }
 }

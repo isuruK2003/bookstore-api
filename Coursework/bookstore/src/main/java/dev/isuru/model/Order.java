@@ -1,26 +1,62 @@
 package dev.isuru.model;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 public class Order {
-    private Integer id;
-    private Integer customerId;
+    private int id;
+    private int customerId;
+    private List<OrderItem> items;
 
-    private List<CartItem> items;
+    public static class OrderItem {
+        private Integer bookId;
+        private Integer quantity;
 
-    public Order() {}
+        public OrderItem() {
+        }
 
-    public Order(int id, int customerId, List<CartItem> items) {
-        this.id = id;
-        this.customerId = customerId;
-        this.items = items;
-    }
+        public OrderItem(Integer bookId, Integer quantity) {
+            this.bookId = bookId;
+            this.quantity = quantity;
+        }
 
-    public Order(int customerId, List<CartItem> items) {
-        this.id = UUID.randomUUID().hashCode();
-        this.customerId = customerId;
-        this.items = items;
+        public Integer getBookId() {
+            return bookId;
+        }
+
+        public void setBookId(Integer bookId) {
+            this.bookId = bookId;
+        }
+
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(Integer quantity) {
+            this.quantity = quantity;
+        }
+
+        @Override
+        public String toString() {
+            return "OrderItem{" +
+                    "bookId=" + bookId +
+                    ", quantity=" + quantity +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            OrderItem that = (OrderItem) o;
+            return Objects.equals(bookId, that.bookId) &&
+                    Objects.equals(quantity, that.quantity);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(bookId, quantity);
+        }
     }
 
     public int getId() {
@@ -39,20 +75,11 @@ public class Order {
         this.customerId = customerId;
     }
 
-    public List<CartItem> getItems() {
+    public List<OrderItem> getItems() {
         return items;
     }
 
-    public void setItems(List<CartItem> items) {
+    public void setItems(List<OrderItem> items) {
         this.items = items;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", customerId=" + customerId +
-                ", items=" + items +
-                '}';
     }
 }
