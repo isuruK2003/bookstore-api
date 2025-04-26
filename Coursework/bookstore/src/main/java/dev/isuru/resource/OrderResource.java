@@ -5,6 +5,7 @@ import dev.isuru.dao.CustomerDAO;
 import dev.isuru.dao.OrderDAO;
 import dev.isuru.exception.CartNotFoundException;
 import dev.isuru.exception.CustomerNotFoundException;
+import dev.isuru.exception.OrderNotFoundException;
 import dev.isuru.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,9 @@ public class OrderResource {
     ) {
         validateCustomerExists(customerId);
         Order order = orderDAO.getOrder(orderId);
+        if (order == null) {
+            throw new OrderNotFoundException(orderId);
+        }
         Response response = Response.ok(order).build();
         logger.info("{} GET /customers/{}/orders/{}", response.getStatus(), customerId, orderId);
         return response;
