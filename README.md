@@ -5,8 +5,6 @@ A simple RESTful API for managing an online bookstore.
 ## Technologies Used
 - Java 8
 - JAX-RS (Jersey)
-- SLF4J (Simple Logging)
-- Maven (WAR packaging)
 - JSON (via Jackson)
 
 ## API Endpoints
