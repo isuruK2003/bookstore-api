@@ -1,0 +1,681 @@
+{
+	"info": {
+		"_postman_id": "9d7b6ad9-5ecd-43cd-a571-87b3d5ba7619",
+		"name": "Bookstore",
+		"description": "Base URL: `http:///bookstore/api/`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33030564"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Get all books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all books by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/books/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"books",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"The Hidden Reality\",\r\n    \"authorId\": 1,\r\n    \"isbn\": \"978-3-16-148410-3\",\r\n    \"publicationYear\": 2016,\r\n    \"price\": 10.99,\r\n    \"stock\": 5\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Book",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"A Brief History of Time\",\r\n    \"authorId\": 1,\r\n    \"isbn\": \"978-3-16-148410-0\",\r\n    \"publicationYear\": 2016,\r\n    \"price\": 1000,\r\n    \"stock\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/books/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"books",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Book",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/books/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"books",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "| **Endpoint** | **Description** |\n| --- | --- |\n| `GET` `/books` | Fetch all books |\n| `GET` `/books/{bookId}` | Fetch a book by book id |\n| `POST` `/books` | Create a new book. For invalid author id in the book object expect an `AuthorNotFoundException` and for other invalid inputs expect an `InvalidInputException` |\n| `PUT` `/books/{bookId}` | Update a book with new data. For invalid author id in the book object expect an `AuthorNotFoundException` and for other invalid inputs expect an `InvalidInputException` |\n| `DELETE` `/books/{bookId}` | Delete a book using book id. For invalid book id, expect a `BookNotFoundException` |\n\nJSON Schema of Book object:\n\n``` json\n{\n    \"title\": \"<Book-Name>\",\n    \"authorId\": <Author-Id>,\n    \"isbn\": \"<ISBN>\",\n    \"publicationYear\": <YEAR>,\n    \"price\": <Price>,\n    \"stock\": <Current-Stock>\n}\n\n ```"
+		},
+		{
+			"name": "Authors",
+			"item": [
+				{
+					"name": "Get all Authors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/authors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new Author",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Brian\",\r\n    \"lastName\": \"Greene\",\r\n    \"biography\": \"Brian Randolph Greene (born February 9, 1963) is an American physicist known for his research on string theory.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/authors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Author",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"James\",\r\n    \"lastName\": \"Clear\",\r\n    \"biography\": \"James Clear is a writer, speaker and entrepreneur. He earned his bachelor's degree in biomechanics from the University of Denison in 2008.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/authors/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"authors",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Author",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/authors/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"authors",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get author by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/authors/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"authors",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get books by author id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/authors/0/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"authors",
+								"0",
+								"books"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "| **Endpoint** | **Description** |\n| --- | --- |\n| `GET` `/authors` | Fetch all the authors available |\n| `GET` `/authors/{authorId}` | Featch an author by id. For invalid author id, expect a `AuthorNotFoundException` |\n| `GET` `/authors/{authorId}/books` | Fetch all books for the specified author. For invalid author id, expect a `AuthorNotFoundException` |\n| `POST` `/authors` | Create a new author. For invalid request body expect a `InvalidInputException` |\n| `PUT` `/authors/{authorId}` | Update the author data with author id. For invalid request body expect a `InvalidInputException` and for invalid author id `AuthorNotFoundException` |\n| `DELETE` `/author/{authorId}` | Delete an author using the author id. For invalid author id expect a `AuthorNotFoundException` |\n\nJSON Schema of an Auther object:\n\n``` json\n{\n    \"firstName\": \"<Author-First-Name>\",\n    \"lastName\": \"<Author-Last-Name>\",\n    \"biography\": \"<A-Brief-Biography-of-Author>\"\n}\n\n ```"
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get all Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a customer by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"James\",\r\n    \"lastName\": \"May\",\r\n    \"email\": \"james@jamesmay.com\",\r\n    \"password\": \"jrk3AVk#3h5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Customer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"James\",\r\n    \"lastName\": \"May\",\r\n    \"email\": \"james@gmail.com\",\r\n    \"password\": \"1vf5fr25g5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "| **Endpoint** | **Description** |\n| --- | --- |\n| GET `/customers` | Get all customers available |\n| GET `/customers/{customerId}` | Get a customer by id |\n| POST `/customers` | Create a new customer. If the customer data is valid it should echo the request body, else it should return a exception message with type `InvalidInputException` |\n| PUT `/customer/{customerId}` | Update a customer with new data. If the customer data is valid it should echo the request body, else it should return a exception message with type `InvalidInputException` |\n| DELETE `/customers/{customerId}` | Deletes a customer. In case of a invalid customer id, a `CustomerNotFoundException` should be expected. |\n\nThe schema for a customer JSON object is given below;\n\n``` json\n{\n    \"firstName\": \"<First-Name>\",\n    \"lastName\": \"<Last-Name>\",\n    \"email\": \"<Email-Address>\",\n    \"password\": \"<Password>\"\n}\n\n ```"
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get cart",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/cart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\": 1,\r\n    \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/cart/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"cart",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\":1,\r\n    \"quantity\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/cart/items/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"cart",
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/cart/items/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"cart",
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "| **Endpoint** | **Description** |\n| --- | --- |\n| GET `customers/{customerId}/cart` | Feteches all the cart items for the specified customer id (`customerId`) |\n| POST `customers/{customerId}/cart/items` | Add a new item to cart. If success should echo the cart object, else returns `CustomerNotFoundException` (if `customerId` is invalid) |\n| PUT `customers/{customerId}/cart/items/{bookId}` | Updates the quantity of a book id that is already in the cart. Should return an empty response body with status code of `204` . If `bookId` is not available in the cart, then an exception message with type of `CartNotFoundException` |\n| DELETE `customers/{customerId}/cart/items/{bookId}` | Removes a cart item from the cart. If cart item (`bookId`) is not found, an exception message with type of `CartNotFoundException` |\n\nJSON Schema of a Cart object:\n\n``` json\n{\n    \"bookId\": <Book-Id>,\n    \"quantity\": <Quantity>\n}\n\n ```"
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Get orders by customerId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create an order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get order by customerId and orderId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookstore/api/customers/0/orders/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookstore",
+								"api",
+								"customers",
+								"0",
+								"orders",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "| **Endpoint** | **Description** |\n| --- | --- |\n| GET `customers/{customerId}/orders` | Fetch all orders for the respective customer id (`customerId`). Returns a list of customer objects |\n| GET `customers/{customerId}/orders/{orderId}` | Get an order by order id for a given customer id. Returns a single order object if got success, else returns an exception with the type of `OrderNotFoundException` |\n| POST `customers/{customerId}/orders` | Creates an order using the customers existing cart. If success, returns the order object else returns an exception with type of `CartNotFoundException` |\n\nJSON Schema for Order object:\n\n``` json\n{\n    \"id\": <Order-Id>,\n    \"customerId\": <Customer-Id>,\n    \"items\": [\n        {\n            \"bookId\": <Book-ID>,\n            \"quantity\": <Quantity>\n        }\n    ]\n}\n\n ```"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "James Clear",
+			"value": "{\r\n    \"firstName\":\"James\",\r\n    \"lastName\": \"Clear\",\r\n    \"biography\": \"James Clear is an American writer. He is best known for his book Atomic Habits.\"\r\n}",
+			"type": "default"
+		},
+		{
+			"key": "Stephen Hawking",
+			"value": "{\r\n    \"firstName\":\"Stephen\",\r\n    \"lastName\": \"Hawking\",\r\n    \"biography\": \"Stephen William Hawking was an English theoretical physicist, cosmologist, and author who was director of research at the Centre for Theoretical Cosmology at the University of Cambridge.\"\r\n}",
+			"type": "default"
+		},
+		{
+			"key": "The Hidden Reality",
+			"value": "{\r\n    \"title\": \"The Hidden Reality\",\r\n    \"authorId\": 2,\r\n    \"isbn\": \"978-3-16-148410-0\",\r\n    \"publicationYear\": 2016,\r\n    \"stock\": 5\r\n}\r\n",
+			"type": "default"
+		}
+	]
+}
